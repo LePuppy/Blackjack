@@ -1,0 +1,176 @@
+You may see some french words. Tell me which ones bother you.
+
+From line 83 to 90 I'm tring to see why the deck is not good according to the console showing an assertion error on line 153.
+
+
+--- Here's my script ---
+
+import random
+
+# functions
+def cardname(n):
+	if n<0 or n>51 : return "carte invalide"
+	if int(n)!=n : return "carte invalide"
+
+	res=""
+
+	#valeur
+	# if n%13 == 0 : res="as"
+	# if n%13 == 1 : res="2"
+	# if n%13 == 2 : res="3"
+	# if n%13 == 3 : res="4"
+	# if n%13 == 4 : res="5"
+	# if n%13 == 5 : res="6"
+	# if n%13 == 6 : res="7"
+	# if n%13 == 7 : res="8"
+	# if n%13 == 8 : res="9"
+	# if n%13 == 9 : res="10"
+	# if n%13 == 10 : res="valet"
+	# if n%13 == 11 : res="dame"
+	# if n%13 == 12 : res="roi"
+
+	res = ["as","2","3","4","5","6","7","8","9","10","valet","dame","roi"][n%13]
+
+	res += " de "
+
+	# couleurs
+#	if n//13 == 0 : res+="trefle"
+#	if n//13 == 1 : res+="carreaux"
+#	if n//13 == 2 : res+="coeurs"  
+#	if n//13 == 3 : res+="piques"
+
+
+
+	res += ["trefle", "carreaux", "coeurs", "piques"][n//13]
+
+	#print res
+
+	return res
+
+def liste_mains(mains):
+
+	noms_des_mains = []
+
+	for i in range(len(mains)):
+		main = mains[i]
+		nom_de_la_main = []
+		for carte in main:
+			nom_de_la_main.append(cardname(carte))
+		if (i == 0):
+			noms_des_mains.append("main du dealer :" + str(nom_de_la_main))
+		else:
+			noms_des_mains.append("main du joueur " + str(i) + " :" + str(nom_de_la_main))
+	return noms_des_mains
+
+def generate_deck():
+
+	deck=[]
+	ordered_deck=range(52)
+	for i in range(52) :
+
+		r=random.randint(0,51-i)
+
+		#print "liste des i", i
+		#print "liste des r", r
+
+		deck.append(ordered_deck[r])
+
+		ordered_deck.pop()  #
+		
+
+
+	assert len(deck) == 52  
+	print deck
+	
+	en_trop=[]
+	inexistant=[]
+	
+	for i in range(52) :
+                if i not in deck:
+                        inexistant.append(i)
+
+        print inexistant
+                
+
+	return deck
+
+
+
+def evaluer_carte(n):
+
+	v = [11,2,3,4,5,6,7,8,9,10,10,10,10][n%13]
+
+	return v
+
+
+def evaluer_main(l):
+
+	s=0
+
+	for i in l:
+		s += evaluer_carte(i)
+
+	return s
+
+def main():
+
+	deck = generate_deck()
+
+	n=input("nombre de joueurs ?")
+
+	print "n= ", n
+
+	mains = []
+	for i in range(n+1):
+		mains.append([])
+
+	for i in range(2):
+		for j in range(n + 1):
+			mains[j].append(deck.pop())
+
+	print liste_mains(mains)
+
+	
+
+
+# tests de cardname(n)
+print "ma carte est 0 et cardname retourne : " + cardname(0)
+print "ma carte est -1 et cardname retourne : " + cardname(-1)
+print "ma carte est 52 et cardname retourne : " + cardname(52)
+print "ma carte est 31.3 et cardname retourne : " + cardname(31.3)
+assert cardname(0) == "as de trefle"
+assert cardname(13) == "as de carreaux"
+assert cardname(26) == "as de coeurs"
+assert cardname(39) == "as de piques"
+assert cardname(40) == "2 de piques"
+assert cardname(48) == "10 de piques"
+assert cardname(51) == "roi de piques"
+
+# test de generate deck
+
+deck=generate_deck()
+
+assert len(deck) == 52
+
+for i in range(52):
+	assert i in deck
+
+# test evaluer carte
+# to do : ajouter cas as == 1
+assert evaluer_carte(0) == 11
+assert evaluer_carte(1) == 2
+assert evaluer_carte(2) == 3
+assert evaluer_carte(11) == 10
+assert evaluer_carte(25) == 10
+assert evaluer_carte(40) == 2
+
+
+# test evaluer main
+
+assert evaluer_main([1]) == 2
+assert evaluer_main([1,2]) == 5
+assert evaluer_main([]) == 0
+assert evaluer_main([14]) == 2	
+
+# main program
+
