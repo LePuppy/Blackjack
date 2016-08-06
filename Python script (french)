@@ -75,22 +75,15 @@ def generate_deck():
 
 		deck.append(ordered_deck[r])
 
-		ordered_deck.pop()  #
+  # remove supprime la premiere occurence d'un element d'une liste
+
+  # ici chaque carte n'est presente qu'une fois dans ordered_deck on peut donc utiliser remove
+
+		ordered_deck.remove(ordered_deck[r])
 		
 
 
 	assert len(deck) == 52  
-	print deck
-	
-	en_trop=[]
-	inexistant=[]
-	
-	for i in range(52) :
-                if i not in deck:
-                        inexistant.append(i)
-
-        print inexistant
-                
 
 	return deck
 
@@ -124,8 +117,15 @@ def main():
 	for i in range(n+1):
 		mains.append([])
 
-	for i in range(2):
-		for j in range(n + 1):
+    		
+    # le croupier est le dernier joueur ici
+
+    # le croupier distribue une carte a chaque joueur puis une a lui meme, puis re distribue une carte aux joueurs. C'est la regle en Europe
+
+	for j in range(n + 1): 		 
+		mains[j].append(deck.pop())
+
+	for j in range(n):
 			mains[j].append(deck.pop())
 
 	print liste_mains(mains)
@@ -134,10 +134,10 @@ def main():
 
 
 # tests de cardname(n)
-print "ma carte est 0 et cardname retourne : " + cardname(0)
-print "ma carte est -1 et cardname retourne : " + cardname(-1)
-print "ma carte est 52 et cardname retourne : " + cardname(52)
-print "ma carte est 31.3 et cardname retourne : " + cardname(31.3)
+#print "ma carte est 0 et cardname retourne : " + cardname(0)
+#print "ma carte est -1 et cardname retourne : " + cardname(-1)
+#print "ma carte est 52 et cardname retourne : " + cardname(52)
+#print "ma carte est 31.3 et cardname retourne : " + cardname(31.3)
 assert cardname(0) == "as de trefle"
 assert cardname(13) == "as de carreaux"
 assert cardname(26) == "as de coeurs"
@@ -173,4 +173,3 @@ assert evaluer_main([]) == 0
 assert evaluer_main([14]) == 2	
 
 # main program
-
