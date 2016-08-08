@@ -23,10 +23,10 @@ def liste_mains(mains):
         nom_de_la_main = []
         for carte in main:
             nom_de_la_main.append(cardname(carte))
-        if (i == 0):
+        if (i == len(mains) - 1):
             noms_des_mains.append("main du dealer :" + str(nom_de_la_main))
         else:
-            noms_des_mains.append("main du joueur " + str(i) + " :" + str(nom_de_la_main))
+            noms_des_mains.append("main du joueur " + str(i + 1) + " :" + str(nom_de_la_main))
 
     return noms_des_mains
 
