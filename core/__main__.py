@@ -25,6 +25,9 @@ def main():
     # on va demander à chaque joueur de hit ou de stay
     # to do : rajouter double, split, blackjack
 
+    bj_case = []
+    for i in range(n+1):
+        bj_case.append([])
 
     for i in range(n):
 
@@ -33,6 +36,10 @@ def main():
         if blackjack.evaluer_main( mains[i] ) == 21 :
 
             print "Blackjack for player " + str(i+1)
+
+            bj_case[i].append("bj")
+
+
 
         while blackjack.evaluer_main( mains[i] ) < 21 :
 
@@ -84,8 +91,9 @@ def main():
 
         if blackjack.evaluer_main( mains[n] ) == 21 and len(mains[n]) == 2 :
 
-
             print "Blackjack for the dealer, all players lose their bet except the ones with a blackjack"
+
+            bj_case[n].append("bj")
 
 
         if blackjack.evaluer_main( mains[n] ) > 21 :
@@ -114,25 +122,50 @@ def main():
 
     for i in range(n) :
 
+        # le dealer n'a pas bust
+  
         if mains[i] != [] and mains[n] != [] :
 
-            if blackjack.evaluer_main(mains[i]) > blackjack.evaluer_main(mains[n])  :
+            # cas bj juste pour le joueur
 
-                 bet_res[i].append("win")
+            if bj_case[i] != [] and bj_case[n] == [] :
 
-                #to do : ajouter de l'argent au joueur
+                bet_res[i].append("win")
+
+            # cas bj pour les deux
+
+            if bj_case[i] != [] and bj_case[n] != [] :
+
+                bet_res[i].append("push")
+
+            # cas bj seulement pour le croupier
+
+            if bj_case[i] == [] and bj_case[n] != [] :
+
+                bet_res[i].append("lose")
+
+            # cas aucun bj
+
+            if blackjack.evaluer_main(mains[i]) > blackjack.evaluer_main(mains[n]) and bj_case[i] == [] :
+
+                    bet_res[i].append("win")
 
             if blackjack.evaluer_main(mains[i]) == blackjack.evaluer_main(mains[n]) :
 
                 bet_res[i].append("push")
 
+
             if blackjack.evaluer_main(mains[i]) < blackjack.evaluer_main(mains[n]) :
 
                 bet_res[i].append("lose")
 
+        # le dealer a bust
+
         if mains[i] != [] and mains[n] == [] :
 
                 bet_res[i].append("win")
+
+    print bet_res
 
 
     # resultats
@@ -141,7 +174,11 @@ def main():
 
         if "win" in bet_res[i] :
 
-            print "Player " + str(i+1) + " is payed"
+            print "Player " + str(i+1) + " is payed 1 for 1"
+
+        if "win" in bet_res[i] and bj_case[i] != [] :
+
+            print "Player " + str(i+1) + " is payed 3 for 2"
 
         if "push" in bet_res[i] :
 
@@ -150,12 +187,6 @@ def main():
         if "lose" in bet_res[i]:
 
             print "Player " + str(i+1) + " loses his bet"
-
-
-
-
-
-
 
 
 
