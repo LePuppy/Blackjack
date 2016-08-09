@@ -22,12 +22,142 @@ def main():
 
     print blackjack.liste_mains(mains)
 
-    # on veut faire évaluer au joueur les mains de chaque joueur
+    # on va demander à chaque joueur de hit ou de stay
+    # to do : rajouter double, split, blackjack
 
-    v_mains = []
+
     for i in range(n):
-        v_mains.append( input ( "evalue la main du joueur " + str(i + 1) + ":" ) )
-    print v_mains
+
+        # cas du blackjack
+
+        if blackjack.evaluer_main( mains[i] ) == 21 :
+
+            print "Blackjack for player " + str(i+1)
+
+        while blackjack.evaluer_main( mains[i] ) < 21 :
+
+
+            choice = input("Player " + str(i+1) + " is at " + str(blackjack.evaluer_main( mains[i] )) 
+                + " and dealer is at " + str(blackjack.evaluer_main(mains[n] )) + ", Hit or stay ? (1/0)")
+
+            # to do : vérifier que la réponse est 1 ou 0 avec les tests
+            # j'ai essayé de demander h/s pour hit or stay et ensuite : if choice == h etc.. mais j'ai une erreur h ou s non défini
+
+            if choice == 1 :
+
+                mains[i].append( deck.pop() )
+
+                print blackjack.liste_mains( mains )[i]
+
+                print blackjack.evaluer_main( mains[i] )
+
+            if blackjack.evaluer_main( mains[i] ) > 21 :
+
+                print "Player " + str(i + 1) + " Busts"
+
+                mains[i] == []
+
+            if blackjack.evaluer_main( mains[i] ) == 21 :
+
+                print "Player " + str(i + 1) + " reaches 21"
+
+            if choice == 0 :
+                
+                print "Player " + str(i + 1) + " stops at " + str(blackjack.evaluer_main( mains[i] ))
+                break
+
+
+    print "It's dealer's turn"
+
+
+    while blackjack.evaluer_main( mains[n] ) < 17 :
+
+        print "Dealer hits"
+
+        mains[n].append( deck.pop() )
+
+        print blackjack.liste_mains( mains )[n]
+
+        print blackjack.evaluer_main( mains[n] )
+
+        # condition de blackjack pour le dealer
+
+        if blackjack.evaluer_main( mains[n] ) == 21 and len(mains[n]) == 2 :
+
+
+            print "Blackjack for the dealer, all players lose their bet except the ones with a blackjack"
+
+
+        if blackjack.evaluer_main( mains[n] ) > 21 :
+
+            mains[n] == []
+
+            print "Dealer busts"
+            print "Players still in are payed"
+
+        if blackjack.evaluer_main( mains[n] ) > 16 and blackjack.evaluer_main( mains[n] ) <= 20 :
+
+            print "Dealer stops at " + str(blackjack.evaluer_main( mains[n] ))
+
+        if blackjack.evaluer_main( mains[n] ) == 21 and len(mains[n]) > 2 :
+
+            print "Dealer reaches 21"
+
+    # comparaison des scores
+
+    bet_res = []
+
+    # j'ai essayé : bet_res = [ []*n ] mais problème
+
+    for i in range(n):
+        bet_res.append([])
+
+    for i in range(n) :
+
+        if mains[i] != [] and mains[n] != [] :
+
+            if blackjack.evaluer_main(mains[i]) > blackjack.evaluer_main(mains[n])  :
+
+                 bet_res[i].append("win")
+
+                #to do : ajouter de l'argent au joueur
+
+            if blackjack.evaluer_main(mains[i]) == blackjack.evaluer_main(mains[n]) :
+
+                bet_res[i].append("push")
+
+            if blackjack.evaluer_main(mains[i]) < blackjack.evaluer_main(mains[n]) :
+
+                bet_res[i].append("lose")
+
+        if mains[i] != [] and mains[n] == [] :
+
+                bet_res[i].append("win")
+
+
+    # resultats
+
+    for i in range (n) :
+
+        if "win" in bet_res[i] :
+
+            print "Player " + str(i+1) + " is payed"
+
+        if "push" in bet_res[i] :
+
+            print "Player " + str(i+1) + " wins nothing"
+
+        if "lose" in bet_res[i]:
+
+            print "Player " + str(i+1) + " loses his bet"
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':

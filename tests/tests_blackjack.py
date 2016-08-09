@@ -54,5 +54,24 @@ class evaluerMainTests(unittest.TestCase):
         self.assertEqual(blackjack.evaluer_main([]), 0)
         self.assertEqual(blackjack.evaluer_main([14]), 2)
 
+class mainTest(unittest.TestCase):
+    """Tests sur main"""
+
+    def test_hand_values_according_to_the_player(self):
+        # je ne connais pas toutes les methodes
+        # je veux que v_mais == v_mains_algo 
+        # i.e que l'évaluation des mains du joueur correspond 
+        # à celle du programme
+
+        
+
+        v_mains_algo = []
+
+        for i in range(n+1):
+            v_mains_algo.append( evaluer_main( liste_mains[i] ) )
+
+        self.assertListEqual(v_mains_algo, v_mains)
+
+
 if __name__ == '__main__':
     unittest.main()
