@@ -42,6 +42,37 @@ def generate_deck():
 
     return deck
 
+def generate_final_deck():
+
+    #nb_decks = input("How many deck to play with ? (2 at least 6 max)")
+
+    sum_decks = []
+    final_deck = []
+
+    for i in range(6):
+
+        sum_decks += generate_deck()
+
+    #on remelange le tout ?
+
+    for i in range(52*6) :
+
+        r=random.randint(0,52*6 - 1 - i )
+
+        final_deck.append(sum_decks[r])
+
+        sum_decks.pop(r)
+
+
+
+    assert len( final_deck ) == 6 * 52
+    assert len( sum_decks ) == 0
+
+    return final_deck
+
+
+
+
 def evaluer_carte(n):
 
     v = [11,2,3,4,5,6,7,8,9,10,10,10,10][n%13]

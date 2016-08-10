@@ -2,9 +2,9 @@ import blackjack
 
 def main():
 
-    deck = blackjack.generate_deck()
+    deck = blackjack.generate_final_deck()
 
-    n=input("nombre de joueurs ?")
+    n=input("How many players ?")
 
     print "n= ", n
 
@@ -43,12 +43,8 @@ def main():
 
         while blackjack.evaluer_main( mains[i] ) < 21 :
 
-
             choice = input("Player " + str(i+1) + " is at " + str(blackjack.evaluer_main( mains[i] )) 
                 + " and dealer is at " + str(blackjack.evaluer_main(mains[n] )) + ", Hit or stay ? (1/0)")
-
-            # to do : vérifier que la réponse est 1 ou 0 avec les tests
-            # j'ai essayé de demander h/s pour hit or stay et ensuite : if choice == h etc.. mais j'ai une erreur h ou s non défini
 
             if choice == 1 :
 
@@ -58,11 +54,18 @@ def main():
 
                 print blackjack.evaluer_main( mains[i] )
 
+
             if blackjack.evaluer_main( mains[i] ) > 21 :
 
                 print "Player " + str(i + 1) + " Busts"
 
-                mains[i] == []
+                while len(mains[i]) > 0 :
+
+                    mains[i].pop()
+
+            if blackjack.evaluer_main( mains[i]) == 0 :
+
+                break
 
             if blackjack.evaluer_main( mains[i] ) == 21 :
 
@@ -87,21 +90,12 @@ def main():
 
         print blackjack.evaluer_main( mains[n] )
 
-        # condition de blackjack pour le dealer
-
         if blackjack.evaluer_main( mains[n] ) == 21 and len(mains[n]) == 2 :
 
             print "Blackjack for the dealer, all players lose their bet except the ones with a blackjack"
 
             bj_case[n].append("bj")
 
-
-        if blackjack.evaluer_main( mains[n] ) > 21 :
-
-            mains[n] == []
-
-            print "Dealer busts"
-            print "Players still in are payed"
 
         if blackjack.evaluer_main( mains[n] ) > 16 and blackjack.evaluer_main( mains[n] ) <= 20 :
 
@@ -111,11 +105,22 @@ def main():
 
             print "Dealer reaches 21"
 
+        if blackjack.evaluer_main( mains[n] ) > 21 :
+
+            while len(mains[n]) > 0 :
+
+                    mains[n].pop()
+
+            print "Dealer busts"
+            print "Players still in are payed"
+
+        if blackjack.evaluer_main( mains[n]) == 0 :
+
+                break
+
     # comparaison des scores
 
     bet_res = []
-
-    # j'ai essayé : bet_res = [ []*n ] mais problème
 
     for i in range(n):
         bet_res.append([])
@@ -146,18 +151,20 @@ def main():
 
             # cas aucun bj
 
-            if blackjack.evaluer_main(mains[i]) > blackjack.evaluer_main(mains[n]) and bj_case[i] == [] :
+            if bj_case[i] == [] and bj_case[n] == [] :
+
+                if blackjack.evaluer_main(mains[i]) > blackjack.evaluer_main(mains[n]) :
 
                     bet_res[i].append("win")
 
-            if blackjack.evaluer_main(mains[i]) == blackjack.evaluer_main(mains[n]) :
+                if blackjack.evaluer_main(mains[i]) == blackjack.evaluer_main(mains[n]) :
 
-                bet_res[i].append("push")
+                    bet_res[i].append("push")
 
 
-            if blackjack.evaluer_main(mains[i]) < blackjack.evaluer_main(mains[n]) :
+                if blackjack.evaluer_main(mains[i]) < blackjack.evaluer_main(mains[n]) :
 
-                bet_res[i].append("lose")
+                    bet_res[i].append("lose")
 
         # le dealer a bust
 
@@ -165,14 +172,24 @@ def main():
 
                 bet_res[i].append("win")
 
+        # le joueur a bust
+
+        if mains[i] == [] and mains[n] != [] :
+
+            bet_res[i].append("lose")
+
     print bet_res
 
 
     # resultats
 
+    for i in range(n):
+
+        assert len(bet_res[i]) == 1
+
     for i in range (n) :
 
-        if "win" in bet_res[i] :
+        if "win" in bet_res[i] :#and bj_case[i] == []
 
             print "Player " + str(i+1) + " is payed 1 for 1"
 
@@ -187,7 +204,6 @@ def main():
         if "lose" in bet_res[i]:
 
             print "Player " + str(i+1) + " loses his bet"
-
 
 
 
