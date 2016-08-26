@@ -2,6 +2,7 @@ import unittest
 from .context import core
 from core import blackjack
 
+
 class cardnameTests(unittest.TestCase):
     """Tests for cardname() in `blackjack.py`."""
 
@@ -54,24 +55,65 @@ class evaluerMainTests(unittest.TestCase):
         self.assertEqual(blackjack.evaluer_main([]), 0)
         self.assertEqual(blackjack.evaluer_main([14]), 2)
 
-class mainTest(unittest.TestCase):
-    """Tests sur main"""
+class Player :
 
-    def test_hand_values_according_to_the_player(self):
-        # je ne connais pas toutes les methodes
-        # je veux que v_mais == v_mains_algo 
-        # i.e que l'évaluation des mains du joueur correspond 
-        # à celle du programme
+    def __init__(self, name) :
+        self.name = name
+        self._bankroll = 0
+        self._bet = 0
+        self._blackjack = 0
 
-        
+    def get_name(self):
+        return self.name
 
-        v_mains_algo = []
+    def _get_bankroll(self):
+        return self._bankroll
 
-        for i in range(n+1):
-            v_mains_algo.append( evaluer_main( liste_mains[i] ) )
+    def _get_bet(self):
+        return self._bet
 
-        self.assertListEqual(v_mains_algo, v_mains)
+    def _get_blackjack(self):
+        return self._blackjack
 
+    def _set_bet(self, n_bet):
+        self._bet = n_bet
+
+    def _set_bankroll(self, n_bankroll):
+        self._bankroll = n_bankroll
+
+
+    def _set_blackjack(self, n_blackjack):
+        self._blackjack = n_blackjack
+
+
+    bankroll = property(_get_bankroll, _set_bankroll)
+    bet = property(_get_bet, _set_bet)
+    bj = property(_get_blackjack, _set_blackjack)
+
+
+
+p1 = Player("Joe")
+p1.bankroll = 20
+p1.bet = 2
+print(p1.bankroll)
+print(p1.bet)
+
+n = 1
+p_list = blackjack.init_players(n)
+deck = blackjack.generate_final_deck()
+mains = blackjack.creer_mains(n, p_list, deck)
+player_issue = blackjack.comparer_scores(mains, n)
+print player_issue
+
+for i in range(n):
+        assert len( player_issue[i] ) == 1
+
+print( blackjack.pay(n, player_issue, p_list) )
+
+print "pas d'erreur jusqu'ici"
+
+
+ 
 
 if __name__ == '__main__':
     unittest.main()
